@@ -1,2 +1,2 @@
 # linkedin-scraper
-A java library that scrapes different data from LinkedIn 
+A java library that scrapes different data from LinkedIn
