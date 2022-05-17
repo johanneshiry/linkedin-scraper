@@ -17,7 +17,7 @@ import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Scraper {
+public final class Scraper {
 
   private static final Logger log = LoggerFactory.getLogger(Scraper.class);
 

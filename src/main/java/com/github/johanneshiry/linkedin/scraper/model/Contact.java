@@ -17,7 +17,7 @@ public sealed interface Contact permits SimpleContact, ExtendedContact {
 
   String name();
 
-  URL url();
+  URL profileUrl();
 
   String occupation();
 }

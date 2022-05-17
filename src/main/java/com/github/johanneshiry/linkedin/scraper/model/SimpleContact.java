@@ -9,9 +9,15 @@ import static com.github.johanneshiry.linkedin.scraper.model.LinkedInConstants.*
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Optional;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-public record SimpleContact(Optional<String> title, String name, String occupation, URL url)
+public record SimpleContact(
+    Optional<String> title,
+    String name,
+    String occupation,
+    URL profileUrl,
+    Optional<URL> smallPictureUrl)
     implements Contact {
 
   public static Optional<SimpleContact> from(WebElement webElement) {
@@ -22,15 +28,33 @@ public record SimpleContact(Optional<String> title, String name, String occupati
     Optional<String> title =
         ContactUtils.titleFromName(cardDetails.findElement(CONNECTION_CARD_NAME).getText().strip());
 
-    Optional<URL> maybeUrl = Optional.empty();
+    Optional<URL> maybeProfileUrl = Optional.empty();
     try {
-      maybeUrl =
+      maybeProfileUrl =
           Optional.of(new URL(webElement.findElement(CONNECTION_CARD_URL).getAttribute("href")));
     } catch (MalformedURLException e) {
       log.error("Cannot parse url for contact '{}' - skipping contact.", name, e);
     }
 
     String occupation = cardDetails.findElement(CONNECTION_CARD_OCCUPATION).getText().strip();
-    return maybeUrl.map(url -> new SimpleContact(title, name, occupation, url));
+    return maybeProfileUrl.map(
+        profileUrl ->
+            new SimpleContact(
+                title, name, occupation, profileUrl, smallPictureUrl(name, webElement)));
+  }
+
+  private static Optional<URL> smallPictureUrl(String name, WebElement webElement) {
+    try {
+      return Optional.of(
+          new URL(
+              webElement
+                  .findElement(CONNECTION_CARD_PICTURE)
+                  .findElement(By.className("presence-entity__image"))
+                  .getAttribute("src")));
+    } catch (MalformedURLException e) {
+      log.error(
+          "Cannot parse url for small contact picture of contact '{}'. Ignoring picture!", name, e);
+      return Optional.empty();
+    }
   }
 }

@@ -34,6 +34,8 @@ public class LinkedInConstants {
 
   public static final By CONNECTION_CARD_URL = By.className("mn-connection-card__link");
 
+  public static final By CONNECTION_CARD_PICTURE = By.className("mn-connection-card__picture");
+
   public static final By CONNECTION_CARD_OCCUPATION =
       By.className("mn-connection-card__occupation");
 }
