@@ -2,13 +2,13 @@
 
 spotless {
   def jhLicHeader = '/*\n' +
-      ' * © $YEAR. Johannes Hiry\n' +
+      ' * © 2022. Johannes Hiry\n' +
       ' */\n\n'
 
   //sets a license header, removes unused imports and formats conforming to the google java format
   java {
     removeUnusedImports() // removes any unused imports
-    googleJavaFormat()
+    googleJavaFormat('1.15.0')
     licenseHeader jhLicHeader
   }
 
