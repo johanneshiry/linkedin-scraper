@@ -6,7 +6,7 @@ package com.github.johanneshiry.linkedin.scraper.main;
 
 import static com.github.johanneshiry.linkedin.scraper.model.LinkedInConstants.*;
 
-import com.github.johanneshiry.linkedin.scraper.model.Contact;
+import com.github.johanneshiry.linkedin.scraper.model.ExtendedContact;
 import com.github.johanneshiry.linkedin.scraper.model.SimpleContact;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -43,7 +43,7 @@ public final class Scraper {
     return connections;
   }
 
-  public static Optional<Contact> getSimpleConnection(
+  public static Optional<SimpleContact> getSimpleConnection(
       String name, String loginUsername, String loginPassword, WebDriver driver) {
     // used to reset provided driver afterwards
     String initialUrl = driver.getCurrentUrl();
@@ -55,12 +55,25 @@ public final class Scraper {
       return Optional.empty();
     }
 
-    Optional<Contact> maybeContact = getConnectionByName(name, driver);
+    Optional<SimpleContact> maybeContact = getConnectionByName(name, driver);
 
     // reset webdriver
     driver.get(initialUrl);
 
     return maybeContact;
+  }
+
+  public static Optional<ExtendedContact> getExtendedConnection(
+      String name, String loginUsername, String loginPassword, WebDriver driver) {
+
+    return getSimpleConnection(name, loginUsername, loginPassword, driver)
+        .flatMap(
+            simpleContact -> {
+              driver.get(simpleContact.profileUrl().toString());
+              WebElement profilePage = driver.findElement(PROFILE_MAIN);
+
+              return ExtendedContact.from(simpleContact, profilePage);
+            });
   }
 
   public static int getNoOfContacts(String loginUsername, String loginPassword, WebDriver driver) {
@@ -107,7 +120,7 @@ public final class Scraper {
         .until(ExpectedConditions.presenceOfElementLocated(CONNECTIONS_SECTION_CLASS_NAME));
   }
 
-  private static Optional<Contact> getConnectionByName(String name, WebDriver driver) {
+  private static Optional<SimpleContact> getConnectionByName(String name, WebDriver driver) {
     try {
       List<SimpleContact> contacts = getConnectionsByNames(List.of(name), driver);
       if (contacts.size() > 1) {

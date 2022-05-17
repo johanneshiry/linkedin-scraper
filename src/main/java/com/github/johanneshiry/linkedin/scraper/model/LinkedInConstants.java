@@ -15,7 +15,7 @@ public class LinkedInConstants {
 
   public static final By LOGIN_PASSWORD = By.id("password");
 
-  /** network / connections window */
+  /** network / connections overview window */
   public static final String CONNECTIONS_URL =
       "https://www.linkedin.com/mynetwork/invite-connect/connections/";
 
@@ -38,4 +38,9 @@ public class LinkedInConstants {
 
   public static final By CONNECTION_CARD_OCCUPATION =
       By.className("mn-connection-card__occupation");
+
+  /** profile page */
+  public static final By PROFILE_MAIN = By.className("scaffold-layout__main");
+
+  public static final By PROFILE_PICTURE = By.className("pv-top-card-profile-picture__image");
 }

@@ -20,4 +20,6 @@ public sealed interface Contact permits SimpleContact, ExtendedContact {
   URL profileUrl();
 
   String occupation();
+
+  Optional<URL> smallPictureUrl();
 }
