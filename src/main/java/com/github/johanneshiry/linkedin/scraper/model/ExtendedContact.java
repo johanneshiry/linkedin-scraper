@@ -12,15 +12,15 @@ import java.util.Optional;
 import org.openqa.selenium.WebElement;
 
 public record ExtendedContact(
-    Optional<String> title,
+    String title,
     String name,
     String occupation,
     URL profileUrl,
-    Optional<URL> smallPictureUrl,
-    Optional<URL> largePictureUrl)
+    URL smallPictureUrl,
+    URL largePictureUrl)
     implements Contact {
 
-  public ExtendedContact(SimpleContact simpleContact, Optional<URL> largePictureUrl) {
+  public ExtendedContact(SimpleContact simpleContact, URL largePictureUrl) {
     this(
         simpleContact.title(),
         simpleContact.name(),
@@ -32,18 +32,32 @@ public record ExtendedContact(
 
   public static Optional<ExtendedContact> from(SimpleContact simpleContact, WebElement webElement) {
 
-    Optional<URL> pictureUrl = largePictureUrl(simpleContact.name(), webElement);
+    URL pictureUrl = largePictureUrl(simpleContact.name(), webElement);
 
     return Optional.of(new ExtendedContact(simpleContact, pictureUrl));
   }
 
-  private static Optional<URL> largePictureUrl(String name, WebElement webElement) {
+  private static URL largePictureUrl(String name, WebElement webElement) {
     try {
-      return Optional.of(new URL(webElement.findElement(PROFILE_PICTURE).getAttribute("src")));
+      return new URL(webElement.findElement(PROFILE_PICTURE).getAttribute("src"));
     } catch (MalformedURLException e) {
       log.error(
           "Cannot parse url for large contact picture of contact '{}'. Ignoring picture!", name, e);
-      return Optional.empty();
+      return null;
     }
+  }
+
+  @Override
+  public Optional<String> getTitle() {
+    return Optional.ofNullable(title);
+  }
+
+  @Override
+  public Optional<URL> getSmallPictureUrl() {
+    return Optional.ofNullable(smallPictureUrl);
+  }
+
+  public Optional<URL> getLargePictureUrl() {
+    return Optional.ofNullable(largePictureUrl);
   }
 }

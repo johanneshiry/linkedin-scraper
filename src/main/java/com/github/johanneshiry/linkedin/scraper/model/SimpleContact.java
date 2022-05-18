@@ -13,11 +13,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 public record SimpleContact(
-    Optional<String> title,
-    String name,
-    String occupation,
-    URL profileUrl,
-    Optional<URL> smallPictureUrl)
+    String title, String name, String occupation, URL profileUrl, URL smallPictureUrl)
     implements Contact {
 
   public static Optional<SimpleContact> from(WebElement webElement) {
@@ -25,8 +21,9 @@ public record SimpleContact(
     String name =
         ContactUtils.nameWithoutTitle(
             cardDetails.findElement(CONNECTION_CARD_NAME).getText().strip());
-    Optional<String> title =
-        ContactUtils.titleFromName(cardDetails.findElement(CONNECTION_CARD_NAME).getText().strip());
+    String title =
+        ContactUtils.titleFromName(cardDetails.findElement(CONNECTION_CARD_NAME).getText().strip())
+            .orElseGet(null);
 
     Optional<URL> maybeProfileUrl = Optional.empty();
     try {
@@ -43,18 +40,27 @@ public record SimpleContact(
                 title, name, occupation, profileUrl, smallPictureUrl(name, webElement)));
   }
 
-  private static Optional<URL> smallPictureUrl(String name, WebElement webElement) {
+  private static URL smallPictureUrl(String name, WebElement webElement) {
     try {
-      return Optional.of(
-          new URL(
-              webElement
-                  .findElement(CONNECTION_CARD_PICTURE)
-                  .findElement(By.className("presence-entity__image"))
-                  .getAttribute("src")));
+      return new URL(
+          webElement
+              .findElement(CONNECTION_CARD_PICTURE)
+              .findElement(By.className("presence-entity__image"))
+              .getAttribute("src"));
     } catch (MalformedURLException e) {
       log.error(
           "Cannot parse url for small contact picture of contact '{}'. Ignoring picture!", name, e);
-      return Optional.empty();
+      return null;
     }
+  }
+
+  @Override
+  public Optional<String> getTitle() {
+    return Optional.ofNullable(title);
+  }
+
+  @Override
+  public Optional<URL> getSmallPictureUrl() {
+    return Optional.ofNullable(smallPictureUrl);
   }
 }
