@@ -77,7 +77,8 @@ public final class Scraper {
             });
   }
 
-  public static int getNoOfContacts(String loginUsername, String loginPassword, ChromeDriver driver) {
+  public static int getNoOfContacts(
+      String loginUsername, String loginPassword, ChromeDriver driver) {
     // used to reset provided driver afterwards
     String initialUrl = driver.getCurrentUrl();
 

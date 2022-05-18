@@ -1,7 +1,9 @@
 plugins {
   id 'java' // java support
   id 'maven-publish'
+  id 'signing'
   id 'com.diffplug.spotless' version '6.2.1'
+  id 'net.thauvin.erik.gradle.semver' version '1.0.4' // semantic versioning
 }
 
 ext {
@@ -16,10 +18,12 @@ java {
   }
 }
 
-group = 'com.github.johanneshiry'
-description = 'Linkedin Scraper'
+group = 'io.github.johanneshiry'
+description = 'LinkedIn Scraper'
 
 apply from: scriptsLocation + 'spotless.gradle'
+apply from: scriptsLocation + 'mavenCentralPublish.gradle'
+apply from: scriptsLocation + 'semVer.gradle'
 
 repositories {
   mavenCentral()
@@ -31,19 +35,6 @@ dependencies {
   implementation 'org.apache.logging.log4j:log4j-core' // log4j
   implementation 'org.apache.logging.log4j:log4j-slf4j-impl' // log4j -> slf4j
 
-
   // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
   implementation 'org.seleniumhq.selenium:selenium-java:4.1.4'
-}
-
-publishing {
-  publications {
-    mavenJava(MavenPublication) {
-      groupId = 'com.github.johanneshiry'
-      artifactId = 'linkedin-scraper'
-      version = '0.1'
-
-      from components.java
-    }
-  }
 }
