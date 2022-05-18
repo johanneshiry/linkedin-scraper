@@ -13,6 +13,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ public final class Scraper {
   private static final Duration BROWSER_WAIT_TIMEOUT = Duration.of(10, ChronoUnit.SECONDS);
 
   public static List<SimpleContact> getSimpleConnections(
-      List<String> names, String loginUsername, String loginPassword, WebDriver driver) {
+      List<String> names, String loginUsername, String loginPassword, ChromeDriver driver) {
     // used to reset provided driver afterwards
     String initialUrl = driver.getCurrentUrl();
 
@@ -44,7 +45,7 @@ public final class Scraper {
   }
 
   public static Optional<SimpleContact> getSimpleConnection(
-      String name, String loginUsername, String loginPassword, WebDriver driver) {
+      String name, String loginUsername, String loginPassword, ChromeDriver driver) {
     // used to reset provided driver afterwards
     String initialUrl = driver.getCurrentUrl();
 
@@ -64,7 +65,7 @@ public final class Scraper {
   }
 
   public static Optional<ExtendedContact> getExtendedConnection(
-      String name, String loginUsername, String loginPassword, WebDriver driver) {
+      String name, String loginUsername, String loginPassword, ChromeDriver driver) {
 
     return getSimpleConnection(name, loginUsername, loginPassword, driver)
         .flatMap(
@@ -76,7 +77,7 @@ public final class Scraper {
             });
   }
 
-  public static int getNoOfContacts(String loginUsername, String loginPassword, WebDriver driver) {
+  public static int getNoOfContacts(String loginUsername, String loginPassword, ChromeDriver driver) {
     // used to reset provided driver afterwards
     String initialUrl = driver.getCurrentUrl();
 
