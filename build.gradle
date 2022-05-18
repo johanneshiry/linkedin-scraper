@@ -39,6 +39,10 @@ dependencies {
 publishing {
   publications {
     mavenJava(MavenPublication) {
+      groupId = 'com.github.johanneshiry'
+      artifactId = 'linkedin-scraper'
+      version = '0.1'
+
       from components.java
     }
   }
