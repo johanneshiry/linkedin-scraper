@@ -16,10 +16,8 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
-
       - name: Build with gradle
         run: ./gradlew clean build javadoc
-
       - name: Deploy to OSS central snapshot repo
         uses: actions/setup-java@v3
         with:
