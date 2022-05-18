@@ -22,7 +22,7 @@ public record SimpleContact(
     String title =
         ContactUtils.titleFromName(
                 cardDetails.findElement(LinkedInConstants.CONNECTION_CARD_NAME).getText().strip())
-            .orElseGet(null);
+            .orElse(null);
 
     Optional<URL> maybeProfileUrl = Optional.empty();
     try {
