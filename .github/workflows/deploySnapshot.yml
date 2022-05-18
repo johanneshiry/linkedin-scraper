@@ -25,7 +25,8 @@ jobs:
       run: echo "CURRENT_VERSION=$(./gradlew -q devVersion)" >> $GITHUB_ENV
 
     - name: Deploy to OSS central snapshot repo
-      run: ./gradlew publish \
-           -Puser=${{ secrets.SONATYPE_USER }} \
-           -Ppassword=${{ secrets.SONATYPE_PASSWORD }} \
-           -PdeployVersion=${{ env.CURRENT_VERSION }}
+      run: | 
+          ./gradlew publish \
+            -Puser=${{ secrets.SONATYPE_USER }} \
+            -Ppassword=${{ secrets.SONATYPE_PASSWORD }} \
+            -PdeployVersion=${{ env.CURRENT_VERSION }}
