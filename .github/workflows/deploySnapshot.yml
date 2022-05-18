@@ -23,6 +23,7 @@ jobs:
 
     - name: Get current artifact version
       run: echo "CURRENT_VERSION=$(./gradlew -q devVersion)" >> $GITHUB_ENV
+
     - name: Deploy to OSS central snapshot repo
       run: ./gradlew publish \
            -Puser=${{ secrets.SONATYPE_USER }} \
