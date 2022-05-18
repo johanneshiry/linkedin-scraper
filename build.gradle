@@ -35,3 +35,11 @@ dependencies {
   // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
   implementation 'org.seleniumhq.selenium:selenium-java:4.1.4'
 }
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+    }
+  }
+}
