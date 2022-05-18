@@ -22,15 +22,3 @@ jobs:
 
     - name: Build with gradle
       run: ./gradlew clean build javadoc
-
-    - name: Deploy to OSS central snapshot repo
-      uses: actions/setup-java@v3
-      with:
-        java-version: 17
-      - name: Get current version
-        run: echo "CURRENT_VERSION=$(./gradlew -q devVersion)" >> $GITHUB_ENV
-      - name: Deploy
-        run:  ./gradlew publish \
-              -Puser=${{ secrets.SONATYPE_USER }} \
-              -Ppassword=${{ secrets.SONATYPE_PASSWORD }} \
-              -PdeployVersion=${{ env.CURRENT_VERSION }}
