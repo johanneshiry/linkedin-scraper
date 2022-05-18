@@ -2,12 +2,11 @@
  * © 2022. Johannes Hiry
  */
 
-package com.github.johanneshiry.linkedin.scraper.main;
+package io.github.johanneshiry.linkedin.scraper.main;
 
-import static com.github.johanneshiry.linkedin.scraper.model.LinkedInConstants.*;
-
-import com.github.johanneshiry.linkedin.scraper.model.ExtendedContact;
-import com.github.johanneshiry.linkedin.scraper.model.SimpleContact;
+import io.github.johanneshiry.linkedin.scraper.model.ExtendedContact;
+import io.github.johanneshiry.linkedin.scraper.model.LinkedInConstants;
+import io.github.johanneshiry.linkedin.scraper.model.SimpleContact;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -71,7 +70,7 @@ public final class Scraper {
         .flatMap(
             simpleContact -> {
               driver.get(simpleContact.profileUrl().toString());
-              WebElement profilePage = driver.findElement(PROFILE_MAIN);
+              WebElement profilePage = driver.findElement(LinkedInConstants.PROFILE_MAIN);
 
               return ExtendedContact.from(simpleContact, profilePage);
             });
@@ -91,7 +90,8 @@ public final class Scraper {
 
     openConnectionsPage(driver);
 
-    WebElement header = driver.findElement(LINKED_IN_CONNECTIONS_HEADER_CLASS_NAME);
+    WebElement header =
+        driver.findElement(LinkedInConstants.LINKED_IN_CONNECTIONS_HEADER_CLASS_NAME);
     String headerString = header.findElement(By.xpath("//header/h1")).getAccessibleName();
 
     // reset webdriver
@@ -103,23 +103,25 @@ public final class Scraper {
   private static void loginToLinkedIn(
       WebDriver driver, String loginUsername, String loginPassword) {
 
-    driver.get(LOGIN_URL);
+    driver.get(LinkedInConstants.LOGIN_URL);
     new WebDriverWait(driver, BROWSER_WAIT_TIMEOUT)
-        .until(ExpectedConditions.presenceOfElementLocated(LOGIN_USERNAME));
+        .until(ExpectedConditions.presenceOfElementLocated(LinkedInConstants.LOGIN_USERNAME));
 
-    WebElement eMail = driver.findElement(LOGIN_USERNAME);
+    WebElement eMail = driver.findElement(LinkedInConstants.LOGIN_USERNAME);
     eMail.sendKeys(loginUsername);
-    WebElement password = driver.findElement(LOGIN_PASSWORD);
+    WebElement password = driver.findElement(LinkedInConstants.LOGIN_PASSWORD);
     password.sendKeys(loginPassword);
 
     password.submit();
   }
 
   private static void openConnectionsPage(WebDriver driver) {
-    driver.get(CONNECTIONS_URL);
+    driver.get(LinkedInConstants.CONNECTIONS_URL);
 
     new WebDriverWait(driver, BROWSER_WAIT_TIMEOUT)
-        .until(ExpectedConditions.presenceOfElementLocated(CONNECTIONS_SECTION_CLASS_NAME));
+        .until(
+            ExpectedConditions.presenceOfElementLocated(
+                LinkedInConstants.CONNECTIONS_SECTION_CLASS_NAME));
   }
 
   private static Optional<SimpleContact> getConnectionByName(String name, WebDriver driver) {
@@ -139,7 +141,7 @@ public final class Scraper {
   private static List<SimpleContact> getConnectionsByNames(List<String> names, WebDriver driver) {
     openConnectionsPage(driver);
 
-    final WebElement search = driver.findElement(CONNECTIONS_SEARCH_INPUT);
+    final WebElement search = driver.findElement(LinkedInConstants.CONNECTIONS_SEARCH_INPUT);
 
     final Wait<WebDriver> wait =
         new FluentWait<>(driver)
@@ -161,7 +163,9 @@ public final class Scraper {
                     wait.until(
                         webDriver -> {
                           List<SimpleContact> foundContacts =
-                              webDriver.findElements(CONNECTIONS_CARD_CLASS_NAME).stream()
+                              webDriver
+                                  .findElements(LinkedInConstants.CONNECTIONS_CARD_CLASS_NAME)
+                                  .stream()
                                   .map(SimpleContact::from)
                                   .flatMap(Optional::stream)
                                   .filter(simpleContact -> simpleContact.name().equals(name))

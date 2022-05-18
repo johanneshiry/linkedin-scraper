@@ -2,9 +2,7 @@
  * © 2022. Johannes Hiry
  */
 
-package com.github.johanneshiry.linkedin.scraper.model;
-
-import static com.github.johanneshiry.linkedin.scraper.model.LinkedInConstants.*;
+package io.github.johanneshiry.linkedin.scraper.model;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -17,23 +15,29 @@ public record SimpleContact(
     implements Contact {
 
   public static Optional<SimpleContact> from(WebElement webElement) {
-    WebElement cardDetails = webElement.findElement(CONNECTION_CARD_DETAILS);
+    WebElement cardDetails = webElement.findElement(LinkedInConstants.CONNECTION_CARD_DETAILS);
     String name =
         ContactUtils.nameWithoutTitle(
-            cardDetails.findElement(CONNECTION_CARD_NAME).getText().strip());
+            cardDetails.findElement(LinkedInConstants.CONNECTION_CARD_NAME).getText().strip());
     String title =
-        ContactUtils.titleFromName(cardDetails.findElement(CONNECTION_CARD_NAME).getText().strip())
+        ContactUtils.titleFromName(
+                cardDetails.findElement(LinkedInConstants.CONNECTION_CARD_NAME).getText().strip())
             .orElseGet(null);
 
     Optional<URL> maybeProfileUrl = Optional.empty();
     try {
       maybeProfileUrl =
-          Optional.of(new URL(webElement.findElement(CONNECTION_CARD_URL).getAttribute("href")));
+          Optional.of(
+              new URL(
+                  webElement
+                      .findElement(LinkedInConstants.CONNECTION_CARD_URL)
+                      .getAttribute("href")));
     } catch (MalformedURLException e) {
       log.error("Cannot parse url for contact '{}' - skipping contact.", name, e);
     }
 
-    String occupation = cardDetails.findElement(CONNECTION_CARD_OCCUPATION).getText().strip();
+    String occupation =
+        cardDetails.findElement(LinkedInConstants.CONNECTION_CARD_OCCUPATION).getText().strip();
     return maybeProfileUrl.map(
         profileUrl ->
             new SimpleContact(
@@ -44,7 +48,7 @@ public record SimpleContact(
     try {
       return new URL(
           webElement
-              .findElement(CONNECTION_CARD_PICTURE)
+              .findElement(LinkedInConstants.CONNECTION_CARD_PICTURE)
               .findElement(By.className("presence-entity__image"))
               .getAttribute("src"));
     } catch (MalformedURLException e) {

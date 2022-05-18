@@ -2,7 +2,7 @@
  * © 2022. Johannes Hiry
  */
 
-package com.github.johanneshiry.linkedin.scraper.model;
+package io.github.johanneshiry.linkedin.scraper.model;
 
 import org.openqa.selenium.By;
 

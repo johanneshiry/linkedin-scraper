@@ -2,9 +2,9 @@
  * © 2022. Johannes Hiry
  */
 
-package com.github.johanneshiry.linkedin.scraper.model;
+package io.github.johanneshiry.linkedin.scraper.model;
 
-import static com.github.johanneshiry.linkedin.scraper.model.LinkedInConstants.PROFILE_PICTURE;
+import static io.github.johanneshiry.linkedin.scraper.model.LinkedInConstants.PROFILE_PICTURE;
 
 import java.net.MalformedURLException;
 import java.net.URL;
