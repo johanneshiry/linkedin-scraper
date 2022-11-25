@@ -2,7 +2,7 @@ plugins {
   id 'java' // java support
   id 'maven-publish'
   id 'signing'
-  id 'com.diffplug.spotless' version '6.6.1'
+  id 'com.diffplug.spotless' version '6.12.0'
   id 'net.thauvin.erik.gradle.semver' version '1.0.4' // semantic versioning
 }
 
